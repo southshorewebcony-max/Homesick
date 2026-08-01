@@ -1,0 +1,1049 @@
+/* =========================================================================
+   HOMESICK — Long Island Emo / Post-Hardcore
+   Stylesheet
+   -------------------------------------------------------------------------
+   Design language: DIY show-flyer / zine booklet. Warm near-black paper,
+   faded burgundy risograph accent, condensed impact display type over a
+   grounded workhorse body face, mono type used like stamped flyer copy.
+   ========================================================================= */
+
+/* -------------------------------------------------------------------------
+   1. TOKENS
+   ------------------------------------------------------------------------- */
+
+:root {
+
+    /* Color */
+    --bg:            #0b0a09;   /* near-black, warm */
+    --bg-alt:        #141210;   /* charcoal panel */
+    --bg-raised:     #1b1815;   /* card / raised surface */
+    --ink:           #ece6d9;   /* off-white paper */
+    --ink-dim:       #b9b3a4;   /* secondary text */
+    --muted:         #837c70;   /* tertiary / captions */
+    --line:          #2c2822;   /* hairline rule */
+    --accent:        #7c2530;   /* faded burgundy */
+    --accent-bright: #a8333f;   /* hover / active burgundy */
+    --accent-dim:    #4a1a20;   /* deep burgundy shadow */
+
+    /* Type */
+    --font-display: 'Anton', 'Arial Narrow', sans-serif;
+    --font-body:    'Archivo Narrow', 'Helvetica Neue', Arial, sans-serif;
+    --font-mono:    'Space Mono', 'Courier New', monospace;
+
+    /* Layout */
+    --container: 1120px;
+    --gutter: 24px;
+    --section-pad: 120px;
+
+    /* Motion */
+    --ease: cubic-bezier(.22,.61,.36,1);
+}
+
+/* -------------------------------------------------------------------------
+   2. RESET
+   ------------------------------------------------------------------------- */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html {
+    scroll-behavior: smooth;
+    background: var(--bg);
+}
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+}
+
+img { max-width: 100%; display: block; }
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+ul { list-style: none; margin: 0; padding: 0; }
+
+h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-transform: uppercase;
+    letter-spacing: 0.01em;
+    margin: 0;
+}
+
+p { margin: 0 0 1em; }
+p:last-child { margin-bottom: 0; }
+
+button { font-family: inherit; }
+
+/* Focus visibility — never suppressed, just styled to match */
+a:focus-visible,
+button:focus-visible,
+video:focus-visible {
+    outline: 2px solid var(--accent-bright);
+    outline-offset: 3px;
+}
+
+.sr-only {
+    position: absolute;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}
+
+.skip-link {
+    position: absolute;
+    left: 12px;
+    top: -60px;
+    background: var(--accent);
+    color: var(--ink);
+    padding: 10px 16px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    z-index: 1000;
+    transition: top .2s var(--ease);
+}
+.skip-link:focus { top: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+        scroll-behavior: auto !important;
+    }
+}
+
+/* -------------------------------------------------------------------------
+   3. GRAIN — signature texture, layered over the whole page
+   ------------------------------------------------------------------------- */
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    pointer-events: none;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.container {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+}
+
+.eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--accent-bright);
+    margin: 0 0 14px;
+    position: relative;
+    padding-left: 22px;
+}
+.eyebrow::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 50%;
+    transform: translateY(-50%);
+    width: 14px; height: 1px;
+    background: var(--accent-bright);
+}
+
+section[id] { scroll-margin-top: 76px; }
+
+/* -------------------------------------------------------------------------
+   4. HEADER / NAV
+   ------------------------------------------------------------------------- */
+
+#site-header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 500;
+    background: rgba(11, 10, 9, 0.72);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s var(--ease), background .3s var(--ease);
+}
+#site-header.is-scrolled {
+    border-bottom-color: var(--line);
+    background: rgba(11, 10, 9, 0.92);
+}
+
+.header-inner {
+    max-width: var(--container);
+    margin: 0 auto;
+    padding: 18px var(--gutter);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo a {
+    font-family: var(--font-display);
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink);
+}
+
+#primary-nav ul {
+    display: flex;
+    gap: 34px;
+}
+
+#primary-nav a {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    padding: 6px 2px;
+    position: relative;
+    transition: color .2s var(--ease);
+}
+#primary-nav a::after {
+    content: "";
+    position: absolute;
+    left: 0; bottom: 0;
+    width: 0; height: 1px;
+    background: var(--accent-bright);
+    transition: width .25s var(--ease);
+}
+#primary-nav a:hover,
+#primary-nav a:focus-visible { color: var(--ink); }
+#primary-nav a:hover::after,
+#primary-nav a:focus-visible::after { width: 100%; }
+
+.nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 38px; height: 34px;
+    background: transparent;
+    border: 1px solid var(--line);
+    cursor: pointer;
+    padding: 0;
+}
+.nav-toggle span {
+    display: block;
+    width: 18px; height: 2px;
+    margin: 0 auto;
+    background: var(--ink);
+    transition: transform .25s var(--ease), opacity .25s var(--ease);
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+@media (max-width: 720px) {
+    .nav-toggle { display: flex; }
+
+    #primary-nav {
+        position: fixed;
+        top: 68px; left: 0; right: 0;
+        background: var(--bg-alt);
+        border-bottom: 1px solid var(--line);
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height .3s var(--ease);
+    }
+    #primary-nav.is-open { max-height: 340px; }
+    #primary-nav ul {
+        flex-direction: column;
+        gap: 0;
+        padding: 8px var(--gutter) 20px;
+    }
+    #primary-nav li { border-top: 1px solid var(--line); }
+    #primary-nav li:first-child { border-top: none; }
+    #primary-nav a { display: block; padding: 16px 4px; }
+}
+
+/* -------------------------------------------------------------------------
+   5. HERO
+   ------------------------------------------------------------------------- */
+
+#hero {
+    position: relative;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    overflow: hidden;
+    background: var(--bg);
+}
+
+.hero-bg {
+    position: absolute;
+    inset: 0;
+
+    background:
+        linear-gradient(rgba(8,8,8,.65), rgba(8,8,8,.82)),
+        radial-gradient(circle at center,
+            rgba(124,37,48,.18),
+            transparent 65%),
+        url("../images/dom-playing-xbox.jpeg");
+
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    filter: grayscale(%)
+        brightness(.70)
+        contrast(1.1)
+        saturate(.9);
+
+    transform: scale(1.03);
+}
+.hero-bg::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+
+    background:
+        radial-gradient(circle at center,
+            rgba(0,0,0,0) 20%,
+            rgba(0,0,0,.35) 70%,
+            rgba(0,0,0,.75) 100%);
+
+    pointer-events: none;
+}
+.hero-grain {
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.75' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    opacity: 0.06;
+    mix-blend-mode: overlay;
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    padding: 0 24px;
+    opacity: 0;
+    animation: hero-in .9s var(--ease) .15s forwards;
+}
+
+@keyframes hero-in {
+    from { opacity: 0; transform: translateY(18px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero-content .location {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 18px;
+}
+
+#hero h1 {
+    font-size: clamp(72px, 16vw, 168px);
+    line-height: 0.88;
+    color: var(--ink);
+    text-shadow: 0 0 60px rgba(124,37,48,0.35);
+    margin-bottom: 18px;
+}
+
+.hero-content .genre {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    margin-bottom: 46px;
+}
+.hero-content .genre .dot { color: var(--accent-bright); margin: 0 6px; }
+
+.hero-buttons {
+    display: flex;
+    gap: 18px;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+.flyer-btn {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    padding: 15px 30px;
+    background: var(--accent);
+    color: var(--ink);
+    border: 1px solid var(--accent);
+    transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease), transform .2s var(--ease);
+}
+.flyer-btn:hover,
+.flyer-btn:focus-visible {
+    background: var(--accent-bright);
+    border-color: var(--accent-bright);
+    transform: translateY(-2px);
+}
+.flyer-btn--outline {
+    background: transparent;
+    border-color: var(--ink-dim);
+    color: var(--ink);
+}
+.flyer-btn--outline:hover,
+.flyer-btn--outline:focus-visible {
+    background: var(--ink);
+    border-color: var(--ink);
+    color: var(--bg);
+}
+
+.scroll-cue {
+    position: absolute;
+    bottom: 34px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 22px; height: 36px;
+    border: 1px solid var(--muted);
+    border-radius: 12px;
+    z-index: 2;
+}
+.scroll-cue span {
+    position: absolute;
+    top: 7px; left: 50%;
+    width: 3px; height: 7px;
+    margin-left: -1.5px;
+    background: var(--ink-dim);
+    border-radius: 2px;
+    animation: scroll-cue 1.8s var(--ease) infinite;
+}
+@keyframes scroll-cue {
+    0%   { opacity: 1; transform: translateY(0); }
+    70%  { opacity: 0; transform: translateY(12px); }
+    100% { opacity: 0; transform: translateY(12px); }
+}
+
+/* -------------------------------------------------------------------------
+   6. SHARED SECTION RHYTHM + FADE-IN
+   ------------------------------------------------------------------------- */
+
+main > section,
+#hero + section {
+    padding: var(--section-pad) 0;
+    border-bottom: 1px solid var(--line);
+}
+
+#release, #shows, #about, #listen { background: var(--bg); }
+#recording, #live-performances, #gallery, #contact { background: var(--bg-alt); }
+
+.reveal {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s var(--ease), transform .7s var(--ease);
+}
+.reveal.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* -------------------------------------------------------------------------
+   7. LATEST RELEASE
+   ------------------------------------------------------------------------- */
+
+.release-content {
+    display: grid;
+    grid-template-columns: 380px 1fr;
+    gap: 56px;
+    align-items: center;
+}
+
+.release-image {
+    position: relative;
+    border: 1px solid var(--line);
+    box-shadow: 14px 14px 0 var(--accent-dim);
+}
+.release-image img { width: 100%; aspect-ratio: 1/1; object-fit: cover; filter: grayscale(35%) contrast(1.08); }
+
+.release-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.2em;
+    color: var(--accent-bright);
+    margin-bottom: 10px;
+}
+
+.release-info h3 {
+    font-size: clamp(34px, 4vw, 52px);
+    margin-bottom: 18px;
+}
+
+.release-info p { color: var(--ink-dim); max-width: 46ch; }
+
+.streaming-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 30px;
+}
+.streaming-buttons a {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 12px 20px;
+    border: 1px solid var(--line);
+    color: var(--ink-dim);
+    transition: border-color .2s var(--ease), color .2s var(--ease), background .2s var(--ease);
+}
+.streaming-buttons a:hover,
+.streaming-buttons a:focus-visible {
+    border-color: var(--accent-bright);
+    color: var(--ink);
+    background: rgba(124,37,48,0.12);
+}
+
+/* -------------------------------------------------------------------------
+   8. RECORDING SESSIONS — studio diary
+   ------------------------------------------------------------------------- */
+
+#recording h2 { font-size: clamp(30px, 4vw, 46px); margin-bottom: 18px; }
+
+.recording-intro {
+    color: var(--ink-dim);
+    max-width: 60ch;
+    margin-bottom: 48px;
+}
+
+.studio-gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+    margin-bottom: 40px;
+}
+.studio-gallery figure { margin: 0; overflow: hidden; border: 1px solid var(--line); }
+.studio-gallery img {
+    width: 100%;
+    aspect-ratio: 4/5;
+    object-fit: cover;
+    filter: grayscale(85%) contrast(1.15) brightness(.85);
+    transition: filter .35s var(--ease), transform .5s var(--ease);
+}
+.studio-gallery figure:hover img {
+    filter: grayscale(20%) contrast(1.1) brightness(.95);
+    transform: scale(1.04);
+}
+
+.studio-video {
+    border: 1px solid var(--line);
+    margin-bottom: 56px;
+    position: relative;
+}
+.studio-video::before {
+    content: "REC ●";
+    position: absolute;
+    top: 14px; left: 14px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: #d4595f;
+    background: rgba(0,0,0,0.55);
+    padding: 5px 9px;
+    pointer-events: none;
+}
+video {
+    width: 100%;
+    display: block;
+    background: #000;
+    filter: saturate(.85) contrast(1.05);
+}
+
+.studio-journal h3 {
+    font-size: 20px;
+    margin-bottom: 22px;
+    color: var(--ink-dim);
+}
+.studio-journal article {
+    display: flex;
+    gap: 22px;
+    padding: 16px 0;
+    border-top: 1px solid var(--line);
+    align-items: baseline;
+    flex-wrap: wrap;
+}
+.studio-journal article:last-child { border-bottom: 1px solid var(--line); }
+.journal-date {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    letter-spacing: 0.1em;
+    color: var(--accent-bright);
+    min-width: 130px;
+}
+.studio-journal article p { color: var(--ink-dim); margin: 0; }
+
+/* -------------------------------------------------------------------------
+   9. SHOWS — flyer stub list
+   ------------------------------------------------------------------------- */
+
+#shows h2 { font-size: clamp(30px, 4vw, 46px); margin-bottom: 40px; }
+
+.show-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.show {
+    display: flex;
+    align-items: center;
+    gap: 28px;
+    padding: 24px 26px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--accent);
+    position: relative;
+    transition: border-color .2s var(--ease), transform .2s var(--ease);
+}
+.show:hover { border-left-color: var(--accent-bright); transform: translateX(4px); }
+
+.show-date {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 76px;
+    height: 76px;
+    flex: none;
+    border: 1px solid var(--line);
+    transform: rotate(-2deg);
+}
+.show-month {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--accent-bright);
+}
+.show-day {
+    font-family: var(--font-display);
+    font-size: 30px;
+    line-height: 1;
+    color: var(--ink);
+    margin-top: 4px;
+}
+
+.show-details { flex: 1; min-width: 0; }
+.show-details h3 { font-size: 22px; margin-bottom: 4px; }
+.show-details p { color: var(--ink-dim); font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.03em; }
+
+.show-link {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    border: 1px solid var(--line);
+    padding: 9px 16px;
+    flex: none;
+    transition: color .2s var(--ease), border-color .2s var(--ease);
+}
+.show-link:hover, .show-link:focus-visible { color: var(--ink); border-color: var(--accent-bright); }
+
+@media (max-width: 560px) {
+    .show { flex-wrap: wrap; gap: 16px; }
+    .show-link { margin-left: auto; }
+}
+
+/* -------------------------------------------------------------------------
+   10. LIVE PERFORMANCES — bootleg archive
+   ------------------------------------------------------------------------- */
+
+#live-performances h2 { font-size: clamp(30px, 4vw, 46px); margin-bottom: 14px; }
+.section-intro { color: var(--ink-dim); max-width: 56ch; margin-bottom: 40px; }
+
+.featured-video {
+    position: relative;
+    border: 1px solid var(--line);
+    margin-bottom: 24px;
+}
+.featured-video::after {
+    content: "LIVE BOOTLEG — SP MODE";
+    position: absolute;
+    bottom: 14px; right: 14px;
+    z-index: 2;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    color: var(--ink-dim);
+    background: rgba(0,0,0,0.55);
+    padding: 5px 9px;
+    pointer-events: none;
+}
+.featured-video video { filter: saturate(.7) contrast(1.1) brightness(.92); }
+
+.performance-info h3 { font-size: 20px; margin-bottom: 4px; }
+.performance-info p { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+
+/* -------------------------------------------------------------------------
+   11. ABOUT
+   ------------------------------------------------------------------------- */
+
+#about h2 { font-size: clamp(30px, 4vw, 46px); margin-bottom: 48px; }
+
+/*
+ * About layout — image now carries more visual weight than the copy, so
+ * the grid is weighted toward it (3fr : 2fr) and the gap is tightened so
+ * the text sits close to the photo instead of drifting to the far edge.
+ * Both columns are vertically centered so a shorter caption block still
+ * lines up with the middle of a wide landscape photo.
+ */
+.about-content {
+    display: grid;
+    grid-template-columns: 3fr 2fr;
+    gap: 40px;
+    align-items: center;
+    margin-bottom: 80px;
+}
+
+/*
+ * The band photo is treated like a landscape print, not a cropped
+ * portrait: the frame is a fixed landscape ratio and the image uses
+ * object-fit: contain so the whole shot — every head, neck, and
+ * instrument — stays inside the frame. The background fill keeps any
+ * letterboxing from reading as empty space.
+ */
+.about-image {
+    border: 1px solid var(--line);
+    overflow: hidden;
+    aspect-ratio: 16 / 10;
+    background: var(--bg-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.about-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: grayscale(85%) contrast(1.1);
+    transform: scale(1);
+    transition: filter .5s var(--ease), transform .5s var(--ease);
+}
+/* Grayscale-to-color reveal + a restrained zoom, hovering the frame (not just the image) so the whole photo area is the hit target */
+.about-image:hover img,
+.about-image:focus-within img {
+    filter: grayscale(0%) contrast(1.05);
+    transform: scale(1.025);
+}
+
+.about-text p { color: var(--ink-dim); max-width: 52ch; }
+
+@media (max-width: 900px) {
+    .about-image { aspect-ratio: 3 / 2; }
+}
+
+.band-members h3 {
+    font-size: 13px;
+    font-family: var(--font-mono);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 26px;
+    text-align: center;
+}
+
+.member-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+}
+
+.member-card {
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    padding: 14px;
+    text-align: center;
+    transition: border-color .25s var(--ease), transform .25s var(--ease);
+}
+.member-card:hover { border-color: var(--accent); transform: translateY(-4px); }
+.member-card img {
+    width: 100%;
+    aspect-ratio: 1/1;
+    object-fit: cover;
+    filter: grayscale(70%);
+    margin-bottom: 14px;
+    transition: filter .3s var(--ease);
+}
+.member-card:hover img { filter: grayscale(15%); }
+.member-card h4 {
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 15px;
+    text-transform: none;
+    letter-spacing: 0;
+    margin-bottom: 3px;
+}
+.member-card p {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent-bright);
+}
+
+
+/* -------------------------------------------------------------------------
+   12. GALLERY
+   ------------------------------------------------------------------------- */
+
+#gallery h2 {
+    font-size: clamp(30px, 4vw, 46px);
+    margin-bottom: 40px;
+}
+
+.gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    grid-auto-rows: 220px;
+    gap: 16px;
+
+    grid-auto-flow: dense;
+}
+.gallery-grid li {
+    overflow: hidden;
+    border-radius: 6px;
+    border: 1px solid var(--line);
+}
+
+.gallery-grid img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: grayscale(45%) contrast(1.08);
+    transition: transform .25s ease, filter .25s ease;
+    cursor: pointer;
+}
+
+.gallery-grid img:hover {
+    transform: scale(1.03);
+    filter: grayscale(0%);
+}
+
+/* Different image sizes */
+
+.wide {
+    grid-column: span 2;
+}
+
+.tall {
+    grid-row: span 2;
+}
+
+.large {
+    grid-column: span 2;
+    grid-row: span 2;
+}
+
+/* -------------------------------------------------------------------------
+   12b. GALLERY LIGHTBOX
+   -------------------------------------------------------------------------
+   Full-photo preview triggered from a gallery thumbnail. Sits above
+   everything (including the fixed header/grain layer), darkens the page,
+   and never crops — object-fit: contain plus a max-width/height cap keeps
+   the whole shot on screen at any aspect ratio.
+   ------------------------------------------------------------------------- */
+
+.lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity .3s var(--ease), visibility 0s linear .3s;
+}
+.lightbox.is-open {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity .3s var(--ease), visibility 0s linear;
+}
+
+.lightbox-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(6, 5, 5, 0.92);
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.lightbox-content {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    max-width: min(92vw, 1100px);
+    max-height: 88vh;
+    transform: scale(.96);
+    transition: transform .3s var(--ease);
+}
+.lightbox.is-open .lightbox-content { transform: scale(1); }
+
+.lightbox-content img {
+    display: block;
+    width: auto;
+    height: auto;
+    max-width: min(92vw, 1100px);
+    max-height: 88vh;
+    object-fit: contain;
+    border: 1px solid var(--line);
+    filter: contrast(1.05);
+}
+
+.lightbox-close {
+    position: absolute;
+    top: 18px;
+    right: 22px;
+    z-index: 2;
+    width: 42px;
+    height: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color .2s var(--ease), color .2s var(--ease), transform .2s var(--ease);
+}
+.lightbox-close:hover,
+.lightbox-close:focus-visible {
+    border-color: var(--accent-bright);
+    color: var(--accent-bright);
+    transform: rotate(90deg);
+}
+
+/* Lock page scroll while the lightbox is open (class toggled via JS) */
+body.lightbox-open {
+    overflow: hidden;
+}
+
+@media (max-width: 560px) {
+    .lightbox { padding: 18px; }
+    .lightbox-close { top: 10px; right: 10px; width: 38px; height: 38px; font-size: 20px; }
+}
+
+/* -------------------------------------------------------------------------
+   13. LISTEN
+   ------------------------------------------------------------------------- */
+
+#listen h2 { font-size: clamp(30px, 4vw, 46px); margin-bottom: 36px; }
+
+.streaming-links {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 16px;
+}
+.streaming-links a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 30px 16px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-dim);
+    transition: background .2s var(--ease), color .2s var(--ease), border-color .2s var(--ease);
+}
+.streaming-links a:hover,
+.streaming-links a:focus-visible {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--ink);
+}
+
+/* -------------------------------------------------------------------------
+   14. CONTACT
+   ------------------------------------------------------------------------- */
+
+#contact { text-align: center; }
+#contact h2 { font-size: clamp(30px, 4vw, 46px); margin-bottom: 24px; }
+.contact-email {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: clamp(16px, 3vw, 22px);
+    letter-spacing: 0.02em;
+    color: var(--ink);
+    border-bottom: 1px solid var(--accent-bright);
+    padding-bottom: 4px;
+    transition: color .2s var(--ease), border-color .2s var(--ease);
+}
+.contact-email:hover, .contact-email:focus-visible {
+    color: var(--accent-bright);
+    border-color: var(--ink);
+}
+
+/* -------------------------------------------------------------------------
+   15. FOOTER
+   ------------------------------------------------------------------------- */
+
+footer {
+    padding: 40px var(--gutter) 46px;
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+}
+footer p { margin: 0 0 6px; }
+footer p:last-child { margin-bottom: 0; }
+
+/* -------------------------------------------------------------------------
+   16. RESPONSIVE
+   ------------------------------------------------------------------------- */
+
+@media (max-width: 900px) {
+    :root { --section-pad: 88px; }
+
+    .release-content { grid-template-columns: 1fr; gap: 34px; }
+    .release-image { max-width: 420px; }
+
+    .about-content { grid-template-columns: 1fr; gap: 34px; }
+    /* Landscape photo stays full-width once stacked — it's the visual anchor of the section, not a thumbnail */
+
+    .member-grid { grid-template-columns: repeat(2, 1fr); }
+
+    .studio-gallery { grid-template-columns: repeat(2, 1fr); }
+
+    .streaming-links { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 560px) {
+    :root { --section-pad: 68px; --gutter: 18px; }
+
+    body { font-size: 16px; }
+
+    .studio-gallery { grid-template-columns: 1fr; }
+
+    .show-details h3 { font-size: 19px; }
+}
